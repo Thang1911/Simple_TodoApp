@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
+import { addTodo } from "../store/slice/todoSlice";
 import { useAppDispatch } from "../store";
-import { addTodo } from "../features/todo/todoSlice";
 
 const Add = () => {
   const nameRef = useRef<String>("");

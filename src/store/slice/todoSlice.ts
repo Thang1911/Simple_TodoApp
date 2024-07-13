@@ -8,12 +8,17 @@ export interface TodoData {
   activated: boolean;
 }
 
-interface Todo {
-  todo: TodoData[];
+
+// interface nen dat ten dang I+ten, eg: ITodo
+interface ITodo {
+
+  // array thi dat ten so nhieu
+  // todo: TodoData[];
+  todos: TodoData[];
 }
 
-const initialState: Todo = {
-  todo: [],
+const initialState: ITodo = {
+  todos: [],
 };
 
 export const TodoSlice = createSlice({
@@ -21,7 +26,7 @@ export const TodoSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state, action: PayloadAction<{ name: string }>) => {
-      state.todo.push({
+      state.todos.push({
         id: uuidv4(),
         name: action.payload.name,
         activated: false,
@@ -31,7 +36,7 @@ export const TodoSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; name: string }>
     ) => {
-      const filteredTodos = state.todo.filter(
+      const filteredTodos = state.todos.filter(
         (todo) =>
           todo.id !== action.payload.id || todo.name !== action.payload.name
       );
@@ -42,7 +47,7 @@ export const TodoSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; name: string; activated: boolean }>
     ) => {
-      const targetIndex = state.todo.findIndex(
+      const targetIndex = state.todos.findIndex(
         (todo) =>
           todo.id === action.payload.id
       );
@@ -50,10 +55,10 @@ export const TodoSlice = createSlice({
       if (targetIndex !== -1) {
         return {
           ...state,
-          todo: [
-            ...state.todo.slice(0, targetIndex),
-            { ...state.todo[targetIndex], activated: activate },
-            ...state.todo.slice(targetIndex + 1),
+          todos: [
+            ...state.todos.slice(0, targetIndex),
+            { ...state.todos[targetIndex], activated: activate },
+            ...state.todos.slice(targetIndex + 1),
           ],
         };
       } else {
@@ -62,7 +67,7 @@ export const TodoSlice = createSlice({
       }
     },
     editTodo: (state, action: PayloadAction<{ id: string; name: string }>) => {
-      const targetIndex = state.todo.findIndex(
+      const targetIndex = state.todos.findIndex(
         (todo) =>
           todo.id === action.payload.id
       );
@@ -70,9 +75,9 @@ export const TodoSlice = createSlice({
         return {
           ...state,
           todo: [
-            ...state.todo.slice(0, targetIndex),
-            { ...state.todo[targetIndex], name: action.payload.name },
-            ...state.todo.slice(targetIndex + 1),
+            ...state.todos.slice(0, targetIndex),
+            { ...state.todos[targetIndex], name: action.payload.name },
+            ...state.todos.slice(targetIndex + 1),
           ],
         };
       } else {

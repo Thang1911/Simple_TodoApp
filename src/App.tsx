@@ -1,15 +1,9 @@
 import React, { useRef } from "react";
 import "./App.css";
-import Lists from "./components/Lists";
-import Add from "./components/Add";
+import Todo from "./features/Todo";
 
 function App() {
-  return (
-    <div>
-      <Add />
-      <Lists />
-    </div>
-  );
+  return <Todo />;
 }
 
 export default App;

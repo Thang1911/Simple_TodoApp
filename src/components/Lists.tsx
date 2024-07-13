@@ -1,16 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { activatedTodo, deleteTodo, editTodo } from "../store/slice/todoSlice";
 import { useAppDispatch, useAppSelector } from "../store";
-import { activatedTodo, deleteTodo, editTodo } from "../features/todo/todoSlice";
-import { TodoData } from "../features/todo/todoSlice";
 
 const Lists = () => {
-  let todos = useAppSelector((state) => state.todo.todo);
+  let todos = useAppSelector((state) => state.todo.todos);
   const dispatch = useAppDispatch();
-  const [todoApp, setTodoApp] = useState<TodoData[]>([]);
-  const [filter, setFilter] = useState<string>("All");
-  useEffect(() => {
-    setTodoApp(todos);
-  }, [todos]);
+
+  // Thua bien
+  // const [todoApp, setTodoApp] = useState<TodoData[]>([]);
+
+
+  // Doan nay nen dung 1 cai Enum 
+  enum EType {
+    ALL = 'All',
+    ACTIVE = 'Active',
+    COMPLETE = 'Complete'
+  }
+  const [filter, setFilter] = useState<EType>(EType.ALL);
+  //const [filter, setFilter] = useState<string>("All");
+
+  // K can thiet lam
+  // useEffect(() => {
+  //   setTodoApp(todos);
+  // }, [todos]);
 
   const [checkedItems, setCheckedItems] = useState(
     new Array(todos.length).fill(false)
@@ -27,16 +39,15 @@ const Lists = () => {
   const filterList = () => {
     let filteredTodos;
 
-    if (filter === "All") {
+    if (filter === EType.ALL) {
       filteredTodos = todos;
-    } else if (filter === "Active") {
+    } else if (filter === EType.ACTIVE) {
       filteredTodos = todos.filter((todo) => todo?.activated === false);
-    } else if (filter === "Complete") {
+    } else if (filter === EType.COMPLETE) {
       filteredTodos = todos.filter((todo) => todo?.activated === true);
     } else {
       filteredTodos = todos;
     }
-    console.log(filteredTodos);
     todos = filteredTodos;
     return todos;
   };
@@ -73,7 +84,9 @@ const Lists = () => {
                     type="text"
                     readOnly={!checkedItems[index]}
                     value={todo?.name}
-                    onChange={(e) => dispatch(editTodo({id: todo?.id, name: e.target.value}))}
+                    onChange={(e) =>
+                      dispatch(editTodo({ id: todo?.id, name: e.target.value }))
+                    }
                   />
                 </td>
                 <td className="px-6 py-4">
@@ -106,7 +119,7 @@ const Lists = () => {
                           })
                         );
                       }}
-                    />{" "}
+                    />
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -127,11 +140,13 @@ const Lists = () => {
       <div className="flex justify-between items-center p-4">
         <p>{todos?.length} items left!</p>
         <div className=" w-96 flex justify-between items-center">
-          <button onClick={() => setFilter("All")}>All</button>
-          <button onClick={() => setFilter("Active")}>Active</button>
-          <button onClick={() => setFilter("Complete")}>Complete</button>
+          <button onClick={() => setFilter(EType.ALL)}>All</button>
+          <button onClick={() => setFilter(EType.ACTIVE)}>Active</button>
+          <button onClick={() => setFilter(EType.COMPLETE)}>Complete</button>
         </div>
-        <button onClick={() => setFilter("Active")}>Clear completed</button>
+
+        {/* Doan Clear complete nay sai logic */}
+        <button onClick={() => setFilter(EType.ACTIVE)}>Clear completed</button>
       </div>
     </>
   );
